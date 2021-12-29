@@ -6,6 +6,7 @@ require('dotenv').config();
 const PORT = process.env.PORT;
 const Campground = require('./models/campground');
 const catchAsync = require('./utils/catchAsync');
+const ExpressError = require('./utils/ExpressError');
 
 const app = express();
 require('./initDB')(); //Initialize DB
