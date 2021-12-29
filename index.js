@@ -1,4 +1,5 @@
 const express = require('express');
+const ejsMate = require('ejs-mate');
 const path = require('path');
 const methodOverride = require('method-override');
 require('dotenv').config();
@@ -8,6 +9,7 @@ const Campground = require('./models/campground');
 const app = express();
 require('./initDB')(); //Initialize DB
 
+app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
