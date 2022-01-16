@@ -37,7 +37,14 @@ router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, nex
 }));
 
 router.get('/:id', catchAsync(async (req, res,) => {
-    const campground = await Campground.findById(req.params.id).populate('reviews').populate('author');
+    // const campground = await Campground.findById(req.params.id).populate('reviews').populate('author');
+    // populate('reviews') is used to populate only the reviews array in the campground model. If we want to get author's data of each review, we need to parse in an obj with path and populate.
+    const campground = await Campground.findById(req.params.id).populate({
+        path: 'reviews',
+        populate: {
+            path: 'author'
+        }
+    }).populate('author');
     if (!campground) {
         req.flash('error', 'Cannot find that campground!');
         return res.redirect('/campgrounds');
