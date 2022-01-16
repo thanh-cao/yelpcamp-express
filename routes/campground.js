@@ -5,10 +5,17 @@ const campgrounds = require('../controllers/campgrounds');
 const catchAsync = require('../utils/catchAsync');
 const { isLoggedIn, isAuthor, validateCampground } = require('../middleware');
 
+// setup multer middlware and cloudinary to upload images
+const multer = require('multer');
+const { storage } = require('../cloudinary');
+const upload = multer({ storage });  // direct multer to save images on cloudinary
+
 // refactored with chaining
+
+// upload.array('image') is used to upload multiple images
 router.route('/')
     .get(catchAsync(campgrounds.index))
-    .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
+    .post(isLoggedIn, upload.array('image'), validateCampground, catchAsync(campgrounds.createCampground))
 
 // /new route needs to be before /:id route otherwise it will be caught by /:id route which will thinks new is an id    
 router.get('/new', isLoggedIn, campgrounds.renderNewForm);
