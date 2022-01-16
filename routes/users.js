@@ -31,7 +31,7 @@ router.get('/login', (req, res) => {
 router.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res) => {
     req.flash('success', `Welcome back, ${req.user.username}!`);
     const redirectUrl = req.session.returnTo || '/campgrounds';
-    delete req.session.returnTo;
+    delete req.session.returnTo; // returnTo created from isLoggedIn middleware. Delete the session variable after loggedin so that it doesn't persist.
     res.redirect(redirectUrl);
 });
 
