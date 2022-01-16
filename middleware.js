@@ -1,5 +1,7 @@
 const Campground = require('./models/campground');
 const Review = require('./models/review');
+const { campgroundSchema, reviewSchema } = require('./schemas.js');
+const ExpressError = require('./utils/ExpressError');
 
 // isLoggedIn middleware to check if user is logged in before allowing them to do certain actions like create new/edit/delete campgrounds etc.
 module.exports.isLoggedIn = (req, res, next) => {
@@ -30,4 +32,26 @@ module.exports.isReviewAuthor = async (req, res, next) => {
         return res.redirect(`/campgrounds/${id}`);
     }
     next();
+}
+
+// middleware to validate campground data before creating new/updating campground
+module.exports.validateCampground = (req, res, next) => {
+    const { error } = campgroundSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
+// middleware to validate review data before creating new/updating review
+module.exports.validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
 }
