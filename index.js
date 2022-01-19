@@ -7,6 +7,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const mongoSanitize = require('express-mongo-sanitize');
 
 const User = require('./models/user');
 const ExpressError = require('./utils/ExpressError')
@@ -31,6 +32,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+// use mongo sanitize to prevent users from injecting dynamic queries into the url which can be used to inject malicious code to the database
+app.use(mongoSanitize({
+    replaceWith: '_'
+}));
 
 const sessionConfig = {
     secret: process.env.SECRET_KEY,
