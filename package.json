@@ -4,7 +4,7 @@
   "description": "A mini walkthrough project following Colt's Web Developer Bootcamp course on udemy.",
   "main": "index.js",
   "scripts": {
-    "start": "nodem index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
