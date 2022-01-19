@@ -4,7 +4,7 @@
   "description": "A mini walkthrough project following Colt's Web Developer Bootcamp course on udemy.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodem index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +21,7 @@
     "@mapbox/mapbox-sdk": "^0.13.2",
     "cloudinary": "^1.28.1",
     "connect-flash": "^0.1.1",
+    "connect-mongo": "^4.6.0",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "ejs-mate": "^3.0.0",

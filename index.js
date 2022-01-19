@@ -1,3 +1,8 @@
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
+const PORT = process.env.PORT;
+
 // import PACKAGES
 const express = require('express');
 const ejsMate = require('ejs-mate');
@@ -9,11 +14,11 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const mongoSanitize = require('express-mongo-sanitize');
 
+const MongoStore = require('connect-mongo');
+
 const User = require('./models/user');
 const ExpressError = require('./utils/ExpressError')
 
-require('dotenv').config();
-const PORT = process.env.PORT;
 
 // import ROUTES
 const campgroundRouters = require('./routes/campground');
@@ -37,7 +42,21 @@ app.use(mongoSanitize({
     replaceWith: '_'
 }));
 
+const store = MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: process.env.SECRET_KEY
+    }
+});
+
+store.on("error", function (e) {
+    console.log("SESSION STORE ERROR", e)
+})
+
 const sessionConfig = {
+    store,
+    name: 'session',
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
